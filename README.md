@@ -39,7 +39,7 @@ if (feature('CUSTOMER_1')) {
 
 ```
 // file1.hbs
-{{#if feature-enabled('CUSTOMER_1')}}
+{{#if (feature-enabled "CUSTOMER_1")}}
   // include if enabled
 {{else}}
   // include if disabled
