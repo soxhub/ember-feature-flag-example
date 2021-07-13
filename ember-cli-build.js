@@ -1,10 +1,17 @@
 'use strict';
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const cleanFeatureFlags = require('./lib/file-remove');
 
 module.exports = function (defaults) {
+	const env = process.env.EMBER_ENV || 'development';
+	const config = defaults.project.config(env);
+	const { features } = config.APP;
+
   let app = new EmberApp(defaults, {
-    // Add options here
+		trees: {
+			app: cleanFeatureFlags(env, features, 'app')
+		}	
   });
 
   // Use `app.import` to add additional libraries to the generated

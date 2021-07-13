@@ -1,56 +1,52 @@
 # ember-feature-flag-example
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+Build time code obfuscation for the frontend.
 
-## Prerequisites
+Often you may create long running branches to work on features that you don't want deployed to customers...just yet.  This system allows you to instead continue working on features and fleshing out bugs while still continuously shipping!
 
-You will need the following things properly installed on your computer.
+Benefits include lower JS / CSS bundles, protecting sensitive information and more!
 
-* [Git](https://git-scm.com/)
-* [Node.js](https://nodejs.org/) (with npm)
-* [Ember CLI](https://ember-cli.com/)
-* [Google Chrome](https://google.com/chrome/)
+Supported file types:
+- JS
+- HBS
+- CSS
 
-## Installation
+Example npm scripts
+- `npm run build:on` 
+- `npm run build:off`
 
-* `git clone <repository-url>` this repository
-* `cd ember-feature-flag-example`
-* `npm install`
+// e.g. `"npm run start:on": "FEATURE_CUSTOMER_1=true ember build --environment=production"`
 
-## Running / Development
+- Remove files based on feature flags
+- Branch level code isolation in .js and hbs files
+- Production environments strips at build time, development && test environment is runtime isolation to allow ease of testing
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
-* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+## Example uses
 
-### Code Generators
+```
+// file1.js
+// @remove-if-enabled CUSTOMER_1
 
-Make use of the many generators for code, try `ember help generate` for more details
+export const ...
+```
 
-### Running Tests
+```
+// file1.js
+if (feature('CUSTOMER_1')) {
+  // include if enabled
+}
+```
 
-* `ember test`
-* `ember test --server`
+```
+// file1.hbs
+{{#if feature-enabled('CUSTOMER_1')}}
+  // include if enabled
+{{else}}
+  // include if disabled
+{{/if}}
+```
 
-### Linting
+TODO:
 
-* `npm run lint`
-* `npm run lint:fix`
-
-### Building
-
-* `ember build` (development)
-* `ember build --environment production` (production)
-
-### Deploying
-
-Specify what it takes to deploy your app.
-
-## Further Reading / Useful Links
-
-* [ember.js](https://emberjs.com/)
-* [ember-cli](https://ember-cli.com/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+- AST evaluation for JS and HBS files
+- Consider `macroCondition` from `@embroider/macros` instead wrapped by a pull in and evaluate the feature flags

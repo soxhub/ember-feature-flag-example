@@ -1,5 +1,7 @@
 'use strict';
 
+let features = require('./features');
+
 module.exports = function (environment) {
   let ENV = {
     modulePrefix: 'ember-feature-flag-example',
@@ -46,6 +48,8 @@ module.exports = function (environment) {
   if (environment === 'production') {
     // here you can enable a production-specific feature
   }
+
+  ENV.APP.features = features;
 
   return ENV;
 };
